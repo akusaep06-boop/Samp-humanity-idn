@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SA-MP Black & White Community Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        mono: {
+                            50: '#F9FAFB',
+                            100: '#F3F4F6',
+                            200: '#E5E7EB',
+                            300: '#D1D5DB',
+                            400: '#9CA3AF',
+                            500: '#6B7280',
+                            600: '#4B5563',
+                            700: '#374151',
+                            800: '#1F2937',
+                            900: '#111827',
+                            950: '#030712'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #030712;
+            color: #F9FAFB;
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .glass-input {
+            background: rgba(3, 7, 18, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+        }
+        .glass-input:focus {
+            border-color: #ffffff;
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6B7280;
+        }
+
+        .bg-custom-target {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .custom-glow {
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body id="mainBody" class="bg-mono-950 text-mono-100 min-h-screen flex flex-col relative selection:bg-mono-100 selection:text-mono-950">
+
+    <!-- Header / Navbar -->
+    <header class="glass-panel sticky top-0 z-40 border-b border-mono-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer select-none group" id="brandLogoTrigger" title="Klik 3x untuk Akses Admin">
+                <div class="w-10 h-10 bg-mono-100 text-mono-950 font-bold flex items-center justify-center rounded border border-mono-300 font-mono text-xl tracking-tighter group-hover:bg-white transition">
+                    SA
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-wider uppercase font-mono leading-none">SA-MP PORTAL</h1>
+                    <span class="text-[10px] text-mono-400 font-mono tracking-widest uppercase block">BLACK & WHITE COMMUNITY</span>
+                </div>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center space-x-1">
+                <button onclick="switchTab('modpack')" id="nav-modpack" class="nav-btn px-4 py-2 rounded text-sm font-medium transition flex items-center space-x-2 bg-mono-100 text-mono-950">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <span>MODPACKS</span>
+                </button>
+                <button onclick="switchTab('chat')" id="nav-chat" class="nav-btn px-4 py-2 rounded text-sm font-medium transition flex items-center space-x-2 text-mono-300 hover:text-white hover:bg-mono-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    <span>CHAT ROOM</span>
+                </button>
+                <button onclick="switchTab('voice')" id="nav-voice" class="nav-btn px-4 py-2 rounded text-sm font-medium transition flex items-center space-x-2 text-mono-300 hover:text-white hover:bg-mono-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 016 0v6a3 3 0 01-3 3z"></path></svg>
+                    <span>VOICE WAR</span>
+                </button>
+            </nav>
+
+            <!-- User Info / Auth Controls -->
+            <div id="userHeaderArea" class="flex items-center space-x-3"></div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full pb-20 md:pb-8">
+
+        <!-- TAB 1: MODPACK -->
+        <section id="tab-modpack" class="tab-content space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 glass-panel p-6 rounded-lg border border-mono-800">
+                <div>
+                    <h2 class="text-2xl font-bold font-mono uppercase tracking-wide">SHARING MODPACK SA-MP</h2>
+                    <p class="text-xs text-mono-400 mt-1">Unggah dan cari modpack GTA San Andreas & SA-MP terbaik secara instan.</p>
+                </div>
+                <button onclick="openUploadModal()" class="px-5 py-2.5 bg-mono-100 hover:bg-white text-mono-950 font-bold rounded flex items-center justify-center space-x-2 transition text-sm font-mono custom-glow">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <span>UPLOAD MODPACK</span>
+                </button>
+            </div>
+
+            <!-- Search Bar & Category Filters -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="md:col-span-1">
+                    <input type="text" id="searchInput" oninput="renderModpacks()" placeholder="Cari judul modpack / uploader..." class="w-full glass-input px-4 py-2 rounded text-xs font-mono">
+                </div>
+                <div class="md:col-span-2 flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none">
+                    <button onclick="filterCategory('All')" class="cat-filter-btn px-4 py-1.5 rounded-full text-xs font-mono font-medium transition border border-mono-100 bg-mono-100 text-mono-950 whitespace-nowrap">ALL</button>
+                    <button onclick="filterCategory('Modpack SA-MP')" class="cat-filter-btn px-4 py-1.5 rounded-full text-xs font-mono font-medium transition border border-mono-800 hover:border-mono-400 text-mono-300 whitespace-nowrap">MODPACK SA-MP</button>
+                    <button onclick="filterCategory('Skin Baju')" class="cat-filter-btn px-4 py-1.5 rounded-full text-xs font-mono font-medium transition border border-mono-800 hover:border-mono-400 text-mono-300 whitespace-nowrap">SKIN BAJU</button>
+                    <button onclick="filterCategory('Hit Sound')" class="cat-filter-btn px-4 py-1.5 rounded-full text-xs font-mono font-medium transition border border-mono-800 hover:border-mono-400 text-mono-300 whitespace-nowrap">HIT SOUND</button>
+                    <button onclick="filterCategory('Skin Senjata')" class="cat-filter-btn px-4 py-1.5 rounded-full text-xs font-mono font-medium transition border border-mono-800 hover:border-mono-400 text-mono-300 whitespace-nowrap">SKIN SENJATA</button>
+                    <button onclick="filterCategory('Skin Mobil')" class="cat-filter-btn px-4 py-1.5 rounded-full text-xs font-mono font-medium transition border border-mono-800 hover:border-mono-400 text-mono-300 whitespace-nowrap">SKIN MOBIL</button>
+                    <button onclick="filterCategory('Moonloader')" class="cat-filter-btn px-4 py-1.5 rounded-full text-xs font-mono font-medium transition border border-mono-800 hover:border-mono-400 text-mono-300 whitespace-nowrap">MOONLOADER</button>
+                    <button onclick="filterCategory('Icon Fast')" class="cat-filter-btn px-4 py-1.5 rounded-full text-xs font-mono font-medium transition border border-mono-800 hover:border-mono-400 text-mono-300 whitespace-nowrap">ICON FAST</button>
+                    <button onclick="filterCategory('Lainnya')" class="cat-filter-btn px-4 py-1.5 rounded-full text-xs font-mono font-medium transition border border-mono-800 hover:border-mono-400 text-mono-300 whitespace-nowrap">LAINNYA</button>
+                </div>
+            </div>
+
+            <!-- Modpack Grid Area -->
+            <div id="modpackGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- TAB 2: CHAT ROOM -->
+        <section id="tab-chat" class="tab-content hidden space-y-4">
+            <div class="glass-panel rounded-lg border border-mono-800 flex flex-col h-[calc(100vh-12rem)] min-h-[500px]">
+                <div class="px-6 py-4 border-b border-mono-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 bg-mono-100 rounded-full animate-pulse"></div>
+                        <h3 class="font-mono font-bold uppercase tracking-wider text-sm">LIVE COMMUNITY CHAT</h3>
+                    </div>
+                    <span class="text-xs font-mono text-mono-400" id="chatOnlineCounter">0 USER REGISTERED</span>
+                </div>
+
+                <div id="chatMessagesBox" class="flex-1 p-4 md:p-6 overflow-y-auto space-y-4"></div>
+
+                <div class="p-4 border-t border-mono-800 bg-mono-950/80">
+                    <form id="chatForm" onsubmit="handleSendChat(event)" class="flex gap-2">
+                        <input id="chatInput" type="text" placeholder="Ketik pesan komunitas..." class="flex-1 glass-input px-4 py-2.5 rounded text-sm font-sans focus:outline-none" autocomplete="off">
+                        <button type="submit" class="px-6 py-2.5 bg-mono-100 hover:bg-white text-mono-950 font-bold rounded text-xs font-mono transition uppercase flex items-center space-x-2">
+                            <span>KIRIM</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: VOICE WAR -->
+        <section id="tab-voice" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 rounded-lg border border-mono-800 space-y-6">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-mono-800 pb-6">
+                    <div>
+                        <div class="inline-block px-3 py-1 bg-mono-800 text-mono-200 rounded text-[10px] font-mono mb-2 uppercase">Official SA-MP Communication</div>
+                        <h2 class="text-2xl font-bold font-mono uppercase tracking-wide">VOICE WAR DISCORD ROOM</h2>
+                        <p class="text-xs text-mono-400 mt-1">Hubungkan suara dengan rekan satu gang atau fraksi saat war turf dan pertempuran.</p>
+                    </div>
+                    <a href="https://discord.com/channels/1530620165400694814/1530634577784213594" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-mono-100 hover:bg-white text-mono-950 font-bold rounded flex items-center space-x-3 transition text-sm font-mono custom-glow">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 016 0v6a3 3 0 01-3 3z"></path></svg>
+                        <span>JOIN VOICE CHANNEL</span>
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
+                    <div class="p-4 bg-mono-950/60 rounded border border-mono-800">
+                        <div class="text-mono-500 mb-1">CHANNEL DISCORD ID</div>
+                        <div class="text-mono-200 font-bold">1530634577784213594</div>
+                    </div>
+                    <div class="p-4 bg-mono-950/60 rounded border border-mono-800">
+                        <div class="text-mono-500 mb-1">VOICE STATUS</div>
+                        <div class="text-mono-200 font-bold flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                            <span>VOICE READY</span>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-mono-950/60 rounded border border-mono-800">
+                        <div class="text-mono-500 mb-1">ATURAN VOICE</div>
+                        <div class="text-mono-300">Push to Talk & No Spam Noise.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADMIN PANEL SECTION -->
+        <section id="tab-admin" class="tab-content hidden space-y-6">
+            <div id="adminDashboard" class="space-y-6">
+                <div class="glass-panel p-6 rounded-lg border border-mono-700 flex items-center justify-between">
+                    <div>
+                        <div class="inline-block px-2 py-0.5 bg-mono-100 text-mono-950 font-mono text-[10px] font-bold rounded mb-1">ADMINISTRATOR LEVEL</div>
+                        <h2 class="text-xl font-bold font-mono uppercase">PANEL UTAMA ADMIN</h2>
+                    </div>
+                    <button onclick="logoutAdmin()" class="px-4 py-2 bg-mono-900 border border-mono-700 hover:bg-mono-800 text-xs font-mono rounded text-red-400">LOGOUT ADMIN</button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Background Customizer -->
+                    <div class="glass-panel p-6 rounded-lg border border-mono-800 space-y-4">
+                        <h3 class="font-mono text-sm font-bold uppercase border-b border-mono-800 pb-2">1. KUSTOMISASI BACKGROUND WEBSITE</h3>
+                        
+                        <div class="space-y-2">
+                            <label class="block text-xs font-mono text-mono-400">UPLOAD FOTO BACKGROUND LOKAL:</label>
+                            <input type="file" id="adminBgFileInput" accept="image/*" onchange="handleAdminBgFileUpload(event)" class="w-full text-xs font-mono text-mono-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-bold file:bg-mono-100 file:text-mono-950 hover:file:bg-white cursor-pointer">
+                        </div>
+
+                        <div class="space-y-2 pt-2 border-t border-mono-800">
+                            <label class="block text-xs font-mono text-mono-400">PILIH WARNA BACKGROUND SOLID:</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="adminBgColorPicker" value="#030712" onchange="handleAdminColorPick(event)" class="w-10 h-10 rounded border border-mono-700 bg-transparent cursor-pointer">
+                                <span class="text-xs font-mono text-mono-300" id="colorCodeLabel">#030712</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <label class="block text-xs font-mono text-mono-400 mb-2">PRESET QUICK THEME:</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="setBgPreset('default')" class="py-2 bg-mono-950 border border-mono-800 text-xs font-mono hover:border-mono-400">DARK SOLID DEFAULT</button>
+                                <button onclick="setBgPreset('dark-gray')" class="py-2 bg-mono-800 border border-mono-600 text-xs font-mono hover:border-mono-400">CHARCOAL MONO</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delete Modpacks -->
+                    <div class="glass-panel p-6 rounded-lg border border-mono-800 space-y-4">
+                        <h3 class="font-mono text-sm font-bold uppercase border-b border-mono-800 pb-2">2. HAPUS MODPACK (MODERASI)</h3>
+                        <div id="adminModpackList" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
+
+                <!-- Ban / Unban User Management -->
+                <div class="glass-panel p-6 rounded-lg border border-mono-800 space-y-4">
+                    <h3 class="font-mono text-sm font-bold uppercase border-b border-mono-800 pb-2">3. MANAJEMEN AKUN & BANNED USER</h3>
+                    <div id="adminUserList" class="space-y-2 max-h-80 overflow-y-auto"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Mobile Navigation Bar -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 glass-panel border-t border-mono-800 z-40 px-2 py-1.5 flex justify-around items-center">
+        <button onclick="switchTab('modpack')" id="mob-nav-modpack" class="flex flex-col items-center p-2 text-mono-100">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <span class="text-[9px] font-mono mt-1">MODS</span>
+        </button>
+        <button onclick="switchTab('chat')" id="mob-nav-chat" class="flex flex-col items-center p-2 text-mono-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            <span class="text-[9px] font-mono mt-1">CHAT</span>
+        </button>
+        <button onclick="switchTab('voice')" id="mob-nav-voice" class="flex flex-col items-center p-2 text-mono-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 016 0v6a3 3 0 01-3 3z"></path></svg>
+            <span class="text-[9px] font-mono mt-1">VOICE</span>
+        </button>
+    </div>
+
+    <!-- MODALS -->
+
+    <!-- MODAL 0: SECRET ADMIN AUTH LOGIN -->
+    <div id="secretAdminModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+        <div class="glass-panel p-6 sm:p-8 rounded-lg border border-mono-700 w-full max-w-md relative space-y-4 text-center">
+            <button onclick="closeModal('secretAdminModal')" class="absolute top-4 right-4 text-mono-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="w-12 h-12 bg-mono-900 border border-mono-700 rounded-full flex items-center justify-center mx-auto text-mono-200">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            </div>
+            <h3 class="text-xl font-mono font-bold uppercase tracking-wider">SECRET ADMIN LOGIN</h3>
+            <p class="text-xs text-mono-400">Akses khusus pengelola sistem. Masukkan Password Admin (112233).</p>
+            <form onsubmit="handleSecretAdminLogin(event)" class="space-y-3 pt-2">
+                <input type="password" id="secretAdminPassInput" placeholder="Password Admin" class="w-full glass-input px-4 py-2.5 rounded text-sm text-center font-mono">
+                <button type="submit" class="w-full py-2.5 bg-mono-100 hover:bg-white text-mono-950 font-bold rounded text-xs font-mono uppercase">MASUK PANEL ADMIN</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 1: AUTH (LOGIN / REGISTER USER) -->
+    <div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+        <div class="glass-panel p-6 sm:p-8 rounded-lg border border-mono-700 w-full max-w-md relative space-y-6">
+            <button onclick="closeModal('authModal')" class="absolute top-4 right-4 text-mono-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="text-center">
+                <h3 id="authModalTitle" class="text-xl font-mono font-bold uppercase">AKUN SA-MP MEMBER</h3>
+                <p class="text-xs text-mono-400 mt-1">Masuk atau daftar untuk berpartisipasi.</p>
+            </div>
+
+            <div class="flex border-b border-mono-800">
+                <button id="authTabLogin" onclick="toggleAuthMode('login')" class="flex-1 py-2 font-mono text-xs font-bold border-b-2 border-mono-100 text-mono-100">LOGIN</button>
+                <button id="authTabRegister" onclick="toggleAuthMode('register')" class="flex-1 py-2 font-mono text-xs font-bold border-b-2 border-transparent text-mono-500 hover:text-mono-300">REGISTER</button>
+            </div>
+
+            <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-mono text-mono-300 mb-1">USERNAME</label>
+                    <input type="text" id="authUsername" required placeholder="Contoh: Carl_Johnson" class="w-full glass-input px-3 py-2 rounded text-sm font-mono">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono text-mono-300 mb-1">PASSWORD</label>
+                    <input type="password" id="authPassword" required placeholder="******" class="w-full glass-input px-3 py-2 rounded text-sm font-mono">
+                </div>
+                
+                <div id="registerExtraFields" class="hidden space-y-4">
+                    <div>
+                        <label class="block text-xs font-mono text-mono-300 mb-1">UPLOAD FOTO PROFIL LOKAL</label>
+                        <input type="file" id="authAvatarFile" accept="image/*" class="w-full text-xs font-mono text-mono-300 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:bg-mono-100 file:text-mono-950">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-mono text-mono-300 mb-1">BIO / STATUS</label>
+                        <input type="text" id="authBio" placeholder="King of Los Santos Drift" class="w-full glass-input px-3 py-2 rounded text-sm font-mono">
+                    </div>
+                </div>
+
+                <div id="authErrorMsg" class="hidden text-xs font-mono text-red-400 bg-red-950/30 p-2 rounded border border-red-900 text-center"></div>
+
+                <button type="submit" id="authSubmitBtn" class="w-full py-2.5 bg-mono-100 hover:bg-white text-mono-950 font-bold text-xs font-mono rounded uppercase">LOG IN</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: EDIT PROFILE -->
+    <div id="editProfileModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+        <div class="glass-panel p-6 sm:p-8 rounded-lg border border-mono-700 w-full max-w-md relative space-y-6">
+            <button onclick="closeModal('editProfileModal')" class="absolute top-4 right-4 text-mono-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="text-center">
+                <h3 class="text-xl font-mono font-bold uppercase">EDIT PROFIL USER</h3>
+                <p class="text-xs text-mono-400 mt-1">Perbarui foto profil, bio, dan password akun kamu.</p>
+            </div>
+
+            <form onsubmit="handleProfileUpdate(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-mono text-mono-300 mb-1">UPLOAD FOTO PROFIL BARU</label>
+                    <input type="file" id="editAvatarFile" accept="image/*" class="w-full text-xs font-mono text-mono-300 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:bg-mono-100 file:text-mono-950">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono text-mono-300 mb-1">STATUS / BIO</label>
+                    <input type="text" id="editBioInput" placeholder="Bio baru..." class="w-full glass-input px-3 py-2 rounded text-sm font-mono">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono text-mono-300 mb-1">GANTI PASSWORD (OPSIONAL)</label>
+                    <input type="password" id="editPassInput" placeholder="Password Baru" class="w-full glass-input px-3 py-2 rounded text-sm font-mono">
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-mono-100 hover:bg-white text-mono-950 font-bold text-xs font-mono rounded uppercase">SIMPAN PERUBAHAN</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: VIEW PROFILE DETAIL -->
+    <div id="viewProfileModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+        <div class="glass-panel p-6 sm:p-8 rounded-lg border border-mono-700 w-full max-w-sm relative space-y-6 text-center">
+            <button onclick="closeModal('viewProfileModal')" class="absolute top-4 right-4 text-mono-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <div class="space-y-3">
+                <img id="viewUserAvatar" src="" alt="Avatar" class="w-24 h-24 rounded-full mx-auto border-2 border-mono-300 object-cover bg-mono-900">
+                <div>
+                    <h3 id="viewUsername" class="text-xl font-mono font-bold uppercase">USERNAME</h3>
+                    <p id="viewUserBio" class="text-xs text-mono-400 italic mt-1 font-sans">"Bio user..."</p>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-mono-800 grid grid-cols-2 gap-2 text-left text-xs font-mono">
+                <div>
+                    <span class="text-mono-500 block">JOIN DATE</span>
+                    <span id="viewUserJoin" class="text-mono-200">2026-10-03</span>
+                </div>
+                <div>
+                    <span class="text-mono-500 block">ROLE</span>
+                    <span id="viewUserRole" class="text-mono-200">MEMBER</span>
+                </div>
+            </div>
+
+            <div class="text-left pt-2">
+                <div class="text-xs font-mono text-mono-400 mb-2 font-bold uppercase">MODPACK DITERBITKAN:</div>
+                <div id="viewUserModList" class="space-y-1 max-h-32 overflow-y-auto text-xs font-mono text-mono-300"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: UPLOAD MODPACK -->
+    <div id="uploadModModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+        <div class="glass-panel p-6 sm:p-8 rounded-lg border border-mono-700 w-full max-w-lg relative space-y-6">
+            <button onclick="closeModal('uploadModModal')" class="absolute top-4 right-4 text-mono-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div>
+                <h3 class="text-xl font-mono font-bold uppercase">SHARE MODPACK SA-MP</h3>
+                <p class="text-xs text-mono-400 mt-1">Isi data modpack dan upload foto preview pendukung.</p>
+            </div>
+
+            <form onsubmit="handleUploadModpack(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-mono text-mono-300 mb-1">JUDUL MODPACK</label>
+                    <input type="text" id="modTitle" required placeholder="Contoh: Modpack Hit Sound HD & Skin Pack" class="w-full glass-input px-3 py-2 rounded text-sm font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono text-mono-300 mb-1">NAMA PEMBUAT / AUTHOR MODPACK</label>
+                    <input type="text" id="modAuthorName" required placeholder="Contoh: CJ_Modder / Official SA-MP" class="w-full glass-input px-3 py-2 rounded text-sm font-mono">
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-mono text-mono-300 mb-1">KATEGORI MODPACK</label>
+                        <select id="modCategory" class="w-full glass-input px-3 py-2 rounded text-sm font-mono">
+                            <option value="Modpack SA-MP">Modpack SA-MP</option>
+                            <option value="Skin Baju">Skin Baju</option>
+                            <option value="Hit Sound">Hit Sound</option>
+                            <option value="Skin Senjata">Skin Senjata</option>
+                            <option value="Skin Mobil">Skin Mobil</option>
+                            <option value="Moonloader">Moonloader</option>
+                            <option value="Icon Fast">Icon Fast</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-mono text-mono-300 mb-1">UPLOAD FOTO PREVIEW</label>
+                        <input type="file" id="modImageFile" accept="image/*" required class="w-full text-xs font-mono text-mono-300 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:bg-mono-100 file:text-mono-950">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono text-mono-300 mb-1">LINK FILE DOWNLOAD / NAMA FILE</label>
+                    <input type="text" id="modDownload" required placeholder="Mediafire link atau nama file.zip" class="w-full glass-input px-3 py-2 rounded text-sm font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono text-mono-300 mb-1">DESKRIPSI MODPACK</label>
+                    <textarea id="modDesc" rows="3" required placeholder="Penjelasan rincian isi modpack..." class="w-full glass-input px-3 py-2 rounded text-sm font-mono"></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-2.5 bg-mono-100 hover:bg-white text-mono-950 font-bold text-xs font-mono rounded uppercase">PUBLISH MODPACK NOW</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastBox" class="fixed bottom-16 md:bottom-6 right-6 z-50 hidden transition-all duration-300">
+        <div id="toastContent" class="glass-panel px-4 py-3 rounded border border-mono-500 shadow-xl font-mono text-xs text-mono-100 flex items-center space-x-2"></div>
+    </div>
+
+    <script>
+        const DEFAULT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1.5'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'></path><circle cx='12' cy='7' r='4'></circle></svg>";
+        const ADMIN_PASSWORD = "112233";
+
+        // Local Storage Initial State
+        let dbUsers = JSON.parse(localStorage.getItem('samp_users_v3')) || [
+            { username: 'admin', password: '112233', avatar: DEFAULT_AVATAR, bio: 'Official Administrator', isBanned: false, isAdmin: true, joinDate: '2026-01-01' },
+            { username: 'Carl_Johnson', password: '123', avatar: DEFAULT_AVATAR, bio: 'Groove Street Leader', isBanned: false, isAdmin: false, joinDate: '2026-02-15' }
+        ];
+
+        let dbModpacks = JSON.parse(localStorage.getItem('samp_modpacks_v3')) || [
+            {
+                id: 'mod-1',
+                title: 'Full Modpack SA-MP Performance Low PC',
+                category: 'Modpack SA-MP',
+                authorName: 'CJ_Modder',
+                uploader: 'Carl_Johnson',
+                image: DEFAULT_AVATAR,
+                downloadUrl: 'https://mediafire.com',
+                desc: 'Modpack SA-MP lengkap berisi sound hit, icon hud fast, dan skin senjata ringan tanpa lag.',
+                likes: 8
+            }
+        ];
+
+        let dbChats = JSON.parse(localStorage.getItem('samp_chats_v3')) || [
+            { username: 'admin', message: 'Selamat datang di SA-MP Community Portal!', timestamp: '12:00' }
+        ];
+
+        let currentUser = JSON.parse(localStorage.getItem('samp_active_user_v3')) || null;
+        let isAdminLoggedIn = JSON.parse(localStorage.getItem('samp_admin_session_v3')) || false;
+        let activeCategoryFilter = 'All';
+
+        let logoClickCount = 0;
+        let logoClickTimer = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadBackgroundSetting();
+            renderUserHeader();
+            renderModpacks();
+            renderChat();
+            setupSecretAdminTriggers();
+            if (isAdminLoggedIn) {
+                renderAdminDashboard();
+            }
+        });
+
+        function setupSecretAdminTriggers() {
+            const logoTrigger = document.getElementById('brandLogoTrigger');
+            if (logoTrigger) {
+                logoTrigger.addEventListener('click', () => {
+                    logoClickCount++;
+                    if (logoClickCount === 3) {
+                        clearTimeout(logoClickTimer);
+                        logoClickCount = 0;
+                        openSecretAdminModal();
+                    } else {
+                        clearTimeout(logoClickTimer);
+                        logoClickTimer = setTimeout(() => {
+                            logoClickCount = 0;
+                        }, 1000);
+                    }
+                });
+            }
+
+            window.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+                    e.preventDefault();
+                    openSecretAdminModal();
+                }
+            });
+        }
+
+        function openSecretAdminModal() {
+            showToast("Akses Rahasia Admin Terbuka!");
+            openModal('secretAdminModal');
+        }
+
+        function handleSecretAdminLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('secretAdminPassInput').value;
+            if (pass === ADMIN_PASSWORD) {
+                isAdminLoggedIn = true;
+                saveState();
+                closeModal('secretAdminModal');
+                switchTab('admin');
+                renderAdminDashboard();
+                showToast("Akses Admin Berhasil Diberikan!");
+            } else {
+                showToast("Password Admin Salah!");
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem('samp_users_v3', JSON.stringify(dbUsers));
+            localStorage.setItem('samp_modpacks_v3', JSON.stringify(dbModpacks));
+            localStorage.setItem('samp_chats_v3', JSON.stringify(dbChats));
+            localStorage.setItem('samp_active_user_v3', JSON.stringify(currentUser));
+            localStorage.setItem('samp_admin_session_v3', JSON.stringify(isAdminLoggedIn));
+        }
+
+        function readFileAsBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-mono-100', 'text-mono-950');
+                btn.classList.add('text-mono-300');
+            });
+
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const activeNav = document.getElementById(`nav-${tabName}`);
+            if (activeNav) {
+                activeNav.classList.remove('text-mono-300');
+                activeNav.classList.add('bg-mono-100', 'text-mono-950');
+            }
+
+            document.querySelectorAll('[id^="mob-nav-"]').forEach(btn => btn.classList.replace('text-mono-100', 'text-mono-400'));
+            const mobActive = document.getElementById(`mob-nav-${tabName}`);
+            if (mobActive) mobActive.classList.replace('text-mono-400', 'text-mono-100');
+        }
+
+        function showToast(msg) {
+            const toastBox = document.getElementById('toastBox');
+            const toastContent = document.getElementById('toastContent');
+            toastContent.innerHTML = `<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> <span>${msg}</span>`;
+            toastBox.classList.remove('hidden');
+            setTimeout(() => toastBox.classList.add('hidden'), 3500);
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('flex');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.getElementById(id).classList.remove('flex');
+        }
+
+        let authMode = 'login';
+        function toggleAuthMode(mode) {
+            authMode = mode;
+            const extraFields = document.getElementById('registerExtraFields');
+            const title = document.getElementById('authModalTitle');
+            const submitBtn = document.getElementById('authSubmitBtn');
+            const tabLogin = document.getElementById('authTabLogin');
+            const tabReg = document.getElementById('authTabRegister');
+
+            if (mode === 'login') {
+                extraFields.classList.add('hidden');
+                title.innerText = 'LOGIN SA-MP MEMBER';
+                submitBtn.innerText = 'LOG IN';
+                tabLogin.className = "flex-1 py-2 font-mono text-xs font-bold border-b-2 border-mono-100 text-mono-100";
+                tabReg.className = "flex-1 py-2 font-mono text-xs font-bold border-b-2 border-transparent text-mono-500 hover:text-mono-300";
+            } else {
+                extraFields.classList.remove('hidden');
+                title.innerText = 'REGISTER AKUN BARU';
+                submitBtn.innerText = 'DAFTAR AKUN';
+                tabReg.className = "flex-1 py-2 font-mono text-xs font-bold border-b-2 border-mono-100 text-mono-100";
+                tabLogin.className = "flex-1 py-2 font-mono text-xs font-bold border-b-2 border-transparent text-mono-500 hover:text-mono-300";
+            }
+        }
+
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            const username = document.getElementById('authUsername').value.trim();
+            const password = document.getElementById('authPassword').value;
+            const errBox = document.getElementById('authErrorMsg');
+            errBox.classList.add('hidden');
+
+            if (authMode === 'login') {
+                const found = dbUsers.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
+                if (!found) {
+                    errBox.innerText = "Username atau password salah!";
+                    errBox.classList.remove('hidden');
+                    return;
+                }
+                if (found.isBanned) {
+                    errBox.innerText = "AKUN TELAH DIBANNED OLEH ADMIN!";
+                    errBox.classList.remove('hidden');
+                    return;
+                }
+                currentUser = found;
+                if (found.username === 'admin') isAdminLoggedIn = true;
+                showToast(`Selamat datang, ${currentUser.username}!`);
+            } else {
+                const exists = dbUsers.some(u => u.username.toLowerCase() === username.toLowerCase());
+                if (exists) {
+                    errBox.innerText = "Username sudah terpakai!";
+                    errBox.classList.remove('hidden');
+                    return;
+                }
+
+                const avatarFileInput = document.getElementById('authAvatarFile');
+                let avatarBase64 = DEFAULT_AVATAR;
+                if (avatarFileInput.files && avatarFileInput.files[0]) {
+                    avatarBase64 = await readFileAsBase64(avatarFileInput.files[0]);
+                }
+
+                const bio = document.getElementById('authBio').value.trim() || 'SA-MP Community Member';
+                const newUser = {
+                    username,
+                    password,
+                    avatar: avatarBase64,
+                    bio,
+                    isBanned: false,
+                    isAdmin: username === 'admin',
+                    joinDate: new Date().toISOString().split('T')[0]
+                };
+
+                dbUsers.push(newUser);
+                currentUser = newUser;
+                if (newUser.isAdmin) isAdminLoggedIn = true;
+                showToast(`Registrasi berhasil! Welcome ${newUser.username}`);
+            }
+
+            saveState();
+            renderUserHeader();
+            if (isAdminLoggedIn) renderAdminDashboard();
+            closeModal('authModal');
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            isAdminLoggedIn = false;
+            saveState();
+            renderUserHeader();
+            switchTab('modpack');
+            showToast("Berhasil logout.");
+        }
+
+        function renderUserHeader() {
+            const area = document.getElementById('userHeaderArea');
+            if (currentUser) {
+                area.innerHTML = `
+                    <div class="flex items-center space-x-3 cursor-pointer p-1.5 rounded hover:bg-mono-900 border border-transparent hover:border-mono-800" onclick="viewUserProfile('${currentUser.username}')">
+                        <img src="${currentUser.avatar}" alt="Avatar" class="w-8 h-8 rounded-full object-cover border border-mono-400">
+                        <div class="hidden sm:block text-left">
+                            <div class="text-xs font-mono font-bold leading-tight flex items-center space-x-1">
+                                <span>${currentUser.username}</span>
+                                ${currentUser.isAdmin ? '<span class="bg-white text-black px-1 rounded text-[8px]">ADM</span>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openModal('editProfileModal')" title="Edit Profil" class="p-2 text-mono-300 hover:text-white border border-mono-800 rounded hover:border-mono-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                    </button>
+                    <button onclick="handleLogout()" title="Logout" class="p-2 text-red-400 hover:text-red-300 border border-mono-800 rounded hover:border-mono-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    </button>
+                `;
+            } else {
+                area.innerHTML = `
+                    <button onclick="openModal('authModal')" class="px-4 py-2 bg-mono-100 hover:bg-white text-mono-950 font-mono font-bold rounded text-xs transition uppercase">
+                        LOGIN / REGISTER
+                    </button>
+                `;
+            }
+        }
+
+        async function handleProfileUpdate(e) {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const avatarFile = document.getElementById('editAvatarFile');
+            if (avatarFile.files && avatarFile.files[0]) {
+                currentUser.avatar = await readFileAsBase64(avatarFile.files[0]);
+            }
+
+            const bio = document.getElementById('editBioInput').value.trim();
+            if (bio) currentUser.bio = bio;
+
+            const pass = document.getElementById('editPassInput').value.trim();
+            if (pass) currentUser.password = pass;
+
+            const idx = dbUsers.findIndex(u => u.username === currentUser.username);
+            if (idx !== -1) dbUsers[idx] = currentUser;
+
+            saveState();
+            renderUserHeader();
+            renderChat();
+            renderModpacks();
+            closeModal('editProfileModal');
+            showToast("Profil berhasil diperbarui!");
+        }
+
+        function viewUserProfile(username) {
+            const user = dbUsers.find(u => u.username === username);
+            if (!user) return;
+
+            document.getElementById('viewUserAvatar').src = user.avatar || DEFAULT_AVATAR;
+            document.getElementById('viewUsername').innerText = user.username;
+            document.getElementById('viewUserBio').innerText = `"${user.bio || 'Tidak ada bio.'}"`;
+            document.getElementById('viewUserJoin').innerText = user.joinDate || '2026-01-01';
+            document.getElementById('viewUserRole').innerText = user.isAdmin ? 'ADMINISTRATOR' : 'MEMBER';
+
+            const userMods = dbModpacks.filter(m => m.uploader === username);
+            const modListContainer = document.getElementById('viewUserModList');
+            if (userMods.length === 0) {
+                modListContainer.innerHTML = '<div class="text-mono-600 italic">Belum ada modpack.</div>';
+            } else {
+                modListContainer.innerHTML = userMods.map(m => `
+                    <div class="p-1.5 bg-mono-900 border border-mono-800 rounded flex items-center justify-between">
+                        <span class="truncate">${m.title}</span>
+                        <span class="text-[9px] bg-mono-800 px-1 rounded">${m.category}</span>
+                    </div>
+                `).join('');
+            }
+
+            openModal('viewProfileModal');
+        }
+
+        function filterCategory(cat) {
+            activeCategoryFilter = cat;
+            document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+                if (btn.innerText.toUpperCase() === cat.toUpperCase() || (cat === 'All' && btn.innerText.includes('ALL'))) {
+                    btn.className = "cat-filter-btn px-4 py-1.5 rounded-full text-xs font-mono font-medium transition border border-mono-100 bg-mono-100 text-mono-950 whitespace-nowrap";
+                } else {
+                    btn.className = "cat-filter-btn px-4 py-1.5 rounded-full text-xs font-mono font-medium transition border border-mono-800 hover:border-mono-400 text-mono-300 whitespace-nowrap";
+                }
+            });
+            renderModpacks();
+        }
+
+        function openUploadModal() {
+            if (!currentUser) {
+                showToast("Harap login untuk upload modpack!");
+                openModal('authModal');
+                return;
+            }
+            if (currentUser.isBanned) {
+                showToast("Akun Anda dibanned. Tidak bisa upload.");
+                return;
+            }
+            openModal('uploadModModal');
+        }
+
+        async function handleUploadModpack(e) {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const title = document.getElementById('modTitle').value.trim();
+            const authorName = document.getElementById('modAuthorName').value.trim();
+            const category = document.getElementById('modCategory').value;
+            const downloadUrl = document.getElementById('modDownload').value.trim();
+            const desc = document.getElementById('modDesc').value.trim();
+
+            const imageFile = document.getElementById('modImageFile');
+            let imageBase64 = DEFAULT_AVATAR;
+            if (imageFile.files && imageFile.files[0]) {
+                imageBase64 = await readFileAsBase64(imageFile.files[0]);
+            }
+
+            const newMod = {
+                id: 'mod-' + Date.now(),
+                title,
+                category,
+                authorName: authorName || currentUser.username,
+                uploader: currentUser.username,
+                image: imageBase64,
+                downloadUrl,
+                desc,
+                likes: 0
+            };
+
+            dbModpacks.unshift(newMod);
+            saveState();
+            renderModpacks();
+            if (isAdminLoggedIn) renderAdminDashboard();
+            closeModal('uploadModModal');
+            showToast("Modpack berhasil diunggah!");
+        }
+
+        function deleteModpack(modId) {
+            dbModpacks = dbModpacks.filter(m => m.id !== modId);
+            saveState();
+            renderModpacks();
+            if (isAdminLoggedIn) renderAdminDashboard();
+            showToast("Modpack telah dihapus.");
+        }
+
+        function toggleLikeModpack(modId) {
+            const mod = dbModpacks.find(m => m.id === modId);
+            if (mod) {
+                mod.likes = (mod.likes || 0) + 1;
+                saveState();
+                renderModpacks();
+            }
+        }
+
+        function renderModpacks() {
+            const grid = document.getElementById('modpackGrid');
+            const searchKeyword = document.getElementById('searchInput') ? document.getElementById('searchInput').value.toLowerCase() : '';
+
+            let filtered = activeCategoryFilter === 'All' ? dbModpacks : dbModpacks.filter(m => m.category === activeCategoryFilter);
+            if (searchKeyword) {
+                filtered = filtered.filter(m => 
+                    m.title.toLowerCase().includes(searchKeyword) || 
+                    (m.authorName && m.authorName.toLowerCase().includes(searchKeyword)) ||
+                    m.uploader.toLowerCase().includes(searchKeyword)
+                );
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-mono-500 font-mono text-sm border border-dashed border-mono-800 rounded">
+                        TIDAK ADA MODPACK TERSEDIA
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(mod => {
+                const isOwner = currentUser && (currentUser.username === mod.uploader || currentUser.isAdmin || isAdminLoggedIn);
+                const uploaderUser = dbUsers.find(u => u.username === mod.uploader);
+                const uploaderAvatar = uploaderUser ? uploaderUser.avatar : DEFAULT_AVATAR;
+
+                return `
+                    <div class="glass-panel rounded-lg border border-mono-800 overflow-hidden flex flex-col hover:border-mono-600 transition group">
+                        <div class="relative h-44 overflow-hidden bg-mono-950">
+                            <img src="${mod.image}" alt="${mod.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                            <span class="absolute top-3 left-3 bg-mono-950/90 border border-mono-700 text-mono-200 px-2 py-1 rounded text-[10px] font-mono font-bold uppercase">
+                                ${mod.category}
+                            </span>
+                        </div>
+                        <div class="p-4 flex-1 flex flex-col justify-between space-y-4">
+                            <div>
+                                <h4 class="font-mono font-bold text-base text-mono-100 group-hover:text-white">${mod.title}</h4>
+                                <div class="text-[11px] font-mono text-mono-400 mt-1">
+                                    <span>PEMBUAT: </span>
+                                    <span class="text-mono-200 font-bold">${mod.authorName || mod.uploader}</span>
+                                </div>
+                                <p class="text-xs text-mono-400 mt-2 line-clamp-2">${mod.desc}</p>
+                            </div>
+                            
+                            <div class="space-y-3 pt-2 border-t border-mono-800">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2 cursor-pointer" onclick="viewUserProfile('${mod.uploader}')">
+                                        <img src="${uploaderAvatar}" class="w-5 h-5 rounded-full object-cover border border-mono-500">
+                                        <span class="text-[10px] font-mono text-mono-400 hover:underline">UP: ${mod.uploader}</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button onclick="toggleLikeModpack('${mod.id}')" class="text-xs font-mono text-mono-400 hover:text-white flex items-center space-x-1">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                                            <span>${mod.likes || 0}</span>
+                                        </button>
+                                        ${isOwner ? `
+                                            <button onclick="deleteModpack('${mod.id}')" class="text-red-400 hover:text-red-300 text-[10px] font-mono uppercase underline">
+                                                HAPUS
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                                <a href="${mod.downloadUrl}" target="_blank" rel="noopener noreferrer" class="w-full py-2 bg-mono-900 border border-mono-700 hover:bg-mono-100 hover:text-mono-950 text-mono-100 font-mono font-bold rounded text-xs flex items-center justify-center space-x-2 transition">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    <span>DOWNLOAD MOD</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function handleSendChat(e) {
+            e.preventDefault();
+            if (!currentUser) {
+                showToast("Silakan login terlebih dahulu.");
+                openModal('authModal');
+                return;
+            }
+            if (currentUser.isBanned) {
+                showToast("Akun Anda telah dibanned!");
+                return;
+            }
+
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const now = new Date();
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+            dbChats.push({
+                username: currentUser.username,
+                message: msg,
+                timestamp: timeStr
+            });
+
+            input.value = '';
+            saveState();
+            renderChat();
+        }
+
+        function renderChat() {
+            const box = document.getElementById('chatMessagesBox');
+            document.getElementById('chatOnlineCounter').innerText = `${dbUsers.length} MEMBERS REGISTERED`;
+
+            box.innerHTML = dbChats.map(c => {
+                const u = dbUsers.find(user => user.username === c.username);
+                const avatar = u ? u.avatar : DEFAULT_AVATAR;
+                const isAdmin = u ? u.isAdmin : false;
+
+                return `
+                    <div class="flex items-start space-x-3 p-2 rounded hover:bg-mono-900/40 transition">
+                        <img src="${avatar}" onclick="viewUserProfile('${c.username}')" alt="Avatar" class="w-9 h-9 rounded-full object-cover border border-mono-500 cursor-pointer flex-shrink-0">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2">
+                                <span onclick="viewUserProfile('${c.username}')" class="font-mono font-bold text-xs cursor-pointer hover:underline text-mono-100">${c.username}</span>
+                                ${isAdmin ? '<span class="bg-mono-100 text-mono-950 font-mono text-[9px] px-1 font-bold rounded">ADMIN</span>' : ''}
+                                <span class="text-[9px] font-mono text-mono-600 ml-auto">${c.timestamp}</span>
+                            </div>
+                            <p class="text-xs text-mono-300 mt-1 font-sans break-words">${c.message}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            saveState();
+            switchTab('modpack');
+            showToast("Keluar dari Panel Admin.");
+        }
+
+        function renderAdminDashboard() {
+            const modContainer = document.getElementById('adminModpackList');
+            modContainer.innerHTML = dbModpacks.map(m => `
+                <div class="flex items-center justify-between p-2 bg-mono-950 rounded border border-mono-800 text-xs font-mono">
+                    <span class="truncate max-w-[200px] text-mono-200">${m.title}</span>
+                    <button onclick="deleteModpack('${m.id}')" class="px-2 py-1 bg-red-950 text-red-300 border border-red-800 rounded hover:bg-red-900 text-[10px]">HAPUS</button>
+                </div>
+            `).join('');
+
+            const userContainer = document.getElementById('adminUserList');
+            userContainer.innerHTML = dbUsers.map(u => `
+                <div class="flex items-center justify-between p-2.5 bg-mono-950 rounded border border-mono-800 text-xs font-mono">
+                    <div class="flex items-center space-x-2">
+                        <img src="${u.avatar}" class="w-6 h-6 rounded-full object-cover">
+                        <span class="font-bold text-mono-200">${u.username}</span>
+                        ${u.isBanned ? '<span class="text-red-400 text-[9px]">[BANNED]</span>' : '<span class="text-mono-500 text-[9px]">[ACTIVE]</span>'}
+                    </div>
+                    <div>
+                        ${u.username !== 'admin' ? `
+                            <button onclick="toggleUserBan('${u.username}')" class="px-3 py-1 ${u.isBanned ? 'bg-mono-200 text-mono-950' : 'bg-mono-900 text-red-400 border border-red-900'} rounded text-[10px] font-bold uppercase">
+                                ${u.isBanned ? 'UNBAN' : 'BAN'}
+                            </button>
+                        ` : '<span class="text-[10px] text-mono-500">SUPERADMIN</span>'}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleUserBan(username) {
+            const idx = dbUsers.findIndex(u => u.username === username);
+            if (idx !== -1) {
+                dbUsers[idx].isBanned = !dbUsers[idx].isBanned;
+                saveState();
+                renderAdminDashboard();
+                showToast(`Status ban ${username} diperbarui.`);
+            }
+        }
+
+        async function handleAdminBgFileUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const bgBase64 = await readFileAsBase64(file);
+            localStorage.setItem('samp_custom_bg_v3', JSON.stringify({ type: 'image', value: bgBase64 }));
+            loadBackgroundSetting();
+            showToast("Background website berhasil diganti!");
+        }
+
+        function handleAdminColorPick(e) {
+            const color = e.target.value;
+            document.getElementById('colorCodeLabel').innerText = color;
+            localStorage.setItem('samp_custom_bg_v3', JSON.stringify({ type: 'color', value: color }));
+            loadBackgroundSetting();
+        }
+
+        function setBgPreset(type) {
+            localStorage.setItem('samp_custom_bg_v3', JSON.stringify({ type: 'preset', value: type }));
+            loadBackgroundSetting();
+            showToast(`Background preset ${type} diterapkan.`);
+        }
+
+        function loadBackgroundSetting() {
+            const bgData = JSON.parse(localStorage.getItem('samp_custom_bg_v3')) || { type: 'preset', value: 'default' };
+            const body = document.getElementById('mainBody');
+
+            body.style.backgroundImage = 'none';
+            body.style.backgroundColor = '#030712';
+            body.className = "bg-mono-950 text-mono-100 min-h-screen flex flex-col relative selection:bg-mono-100 selection:text-mono-950";
+
+            if (bgData.type === 'image') {
+                body.style.backgroundImage = `url('${bgData.value}')`;
+                body.classList.add('bg-custom-target');
+            } else if (bgData.type === 'color') {
+                body.style.backgroundColor = bgData.value;
+            } else {
+                if (bgData.value === 'dark-gray') {
+                    body.style.backgroundColor = '#111827';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
